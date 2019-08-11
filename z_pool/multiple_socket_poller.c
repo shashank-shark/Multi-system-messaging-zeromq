@@ -19,6 +19,8 @@ int main (int argc, char **argv)
 		{ subscriber, 0, ZMQ_POLLIN, 0}
 	};
 
+	int i = 0;
+
 	while (1)
 	{
 		zmq_msg_t message;
@@ -30,9 +32,13 @@ int main (int argc, char **argv)
 			zmq_msg_recv (&message, reciever, 0);
 
 			// process task
+			i ++;
+			printf ("TASK : %d\n", i);
 
 			zmq_msg_close (&message);
 		}
+
+		printf ("%d", items[1].revents & ZMQ_POLLIN);
 
 		if (items[1].revents & ZMQ_POLLIN)
 		{
@@ -40,6 +46,7 @@ int main (int argc, char **argv)
 			zmq_msg_recv (&message, subscriber, 0);
 
 			// process update
+			printf ("UPDATE FROM WEATHER STATION : %d\n", i);
 
 			zmq_msg_close (&message);
 		}

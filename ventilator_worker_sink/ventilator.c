@@ -39,5 +39,5 @@ int main (void)
     zmq_close (sink);
     zmq_close (sender);
     zmq_ctx_destroy (context);
-    return 0;
+    return -1;
 }

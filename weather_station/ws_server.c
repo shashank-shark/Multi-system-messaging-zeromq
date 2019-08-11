@@ -11,8 +11,8 @@ int main (int argc, char **argv)
 
 	assert (rc == 0);
 
-	rc = zmq_bind (publisher, "ipc://weather.ipc");
-	assert (rc == 0);
+	//rc = zmq_bind (publisher, "ipc://weather.ipc");
+	//assert (rc == 0);
 
 	// Initialize the random number generator
 	srandom ((unsigned) time (NULL));
