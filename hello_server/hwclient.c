@@ -9,7 +9,7 @@ int main (int argc, char **argv)
 	printf ("Connecting to hello world server\n");
 	void *requester = zmq_socket (context, ZMQ_REQ);
 
-	zmq_connect (requester, "tcp://localhost:5555");
+	zmq_connect (requester, "tcp://192.168.43.136:5555");
 
 
 	int request_nbr = 0;
