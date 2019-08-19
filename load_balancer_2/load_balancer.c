@@ -1,6 +1,6 @@
 // LOAD BALANCER 2
 
-#include <pthread>
+#include <pthread.h>
 #include "zhelpers.h"
 
 #define NBR_CLIENTS 30
@@ -152,7 +152,7 @@ int main (int argc, char **argv)
 			free (client_id);
 		}
 
-		if (items[0].revents & ZMQ_POLLIN)
+		if (items[1].revents & ZMQ_POLLIN)
 		{
 			char *client_id = s_recv (frontend);
 			char *empty = s_recv (frontend);
