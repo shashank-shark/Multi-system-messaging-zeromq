@@ -1,24 +1,30 @@
-#include <czmq.h>
+#include "zhelpers.h"
+#include <unistd.h>
 
 int main (void)
 {
+    void *context = zmq_ctx_new ();
 
-    zctx_t *ctx = zctx_new();
+    //  Socket to talk to clients
+    void *responder = zmq_socket (context, ZMQ_REP);
+    zmq_connect (responder, "tcp://localhost:5560");
 
-    void *responder = zsocket_new(ctx, ZMQ_REP);
-    zsocket_bind(responder, "tcp://localhost:5560");
+    while (1) {
+        //  Wait for next request from client
+        char *string = s_recv (responder);
+        printf ("Received request: [%s]\n", string);
 
-    // poll for requests from broker
-    while (1)
-    {
-        char *str = zstr_recv (responder);
-        printf ("Request Recieved : [%s]\n", str);
-
+        strcat (string, "Replied");
+        
+        //  Do some 'work'
         sleep (1);
-        zstr_sendf (responder, "Replied - %s",str);
-        free (str);
+
+        //  Send reply back to client
+        s_send (responder, string);
+        free (string);
     }
+    //  We never get here, but clean up anyhow
     zmq_close (responder);
-    zctx_destroy (&ctx);
+    zmq_ctx_destroy (context);
     return 0;
 }

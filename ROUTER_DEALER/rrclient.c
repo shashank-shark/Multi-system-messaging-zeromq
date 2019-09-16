@@ -1,25 +1,23 @@
-#include <czmq.h>
+#include "zhelpers.h"
+#include <unistd.h>
 
-int main (void) 
+int main (void)
 {
-    zctx_t *ctx = zctx_new();
+    void *context = zmq_ctx_new ();
 
-    // connect to the talk server
-    void *requester = zsocket_new (ctx, ZMQ_REQ);
-    zsocket_bind (requester, "tcp://localhost:5559");
+    //  Socket to talk to server
+    void *requester = zmq_socket (context, ZMQ_REQ);
+    zmq_connect (requester, "tcp://localhost:5559");
 
-    int request_nbr = 0;
-    for (request_nbr = 0; request_nbr != 10; request_nbr ++)
-    {
-        zstr_sendm (requester, "Hello");
-        sleep (1);
-        char *str = zstr_recv (requester);
-        printf ("Recieved Reply for request %d : [%s] \n",request_nbr, str );
-        free (str);
+    int request_nbr;
+    for (request_nbr = 0; request_nbr != 10; request_nbr++) {
+        s_send (requester, "Hello");
+        sleep(1);
+        char *string = s_recv (requester);
+        printf ("Received reply %d [%s]\n", request_nbr, string);
+        free (string);
     }
-
     zmq_close (requester);
-    zctx_destroy (&ctx);
-
+    zmq_ctx_destroy (context);
     return 0;
 }
