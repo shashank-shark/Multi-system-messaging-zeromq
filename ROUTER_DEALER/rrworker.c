@@ -18,7 +18,7 @@ int main (void)
         zstr_sendf (responder, "Replied - %s",str);
         free (str);
     }
-
+    zmq_close (responder);
     zctx_destroy (&ctx);
     return 0;
 }

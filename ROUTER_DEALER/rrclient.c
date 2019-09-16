@@ -12,11 +12,13 @@ int main (void)
     for (request_nbr = 0; request_nbr != 10; request_nbr ++)
     {
         zstr_sendm (requester, "Hello");
+        sleep (1);
         char *str = zstr_recv (requester);
         printf ("Recieved Reply for request %d : [%s] \n",request_nbr, str );
         free (str);
     }
 
+    zmq_close (requester);
     zctx_destroy (&ctx);
 
     return 0;
