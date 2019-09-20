@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "mdp.h": "c"
+        "mdp.h": "c",
+        "mdcliapi.h": "c"
     }
 }
