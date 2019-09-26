@@ -43,3 +43,17 @@ publisher_thread (void *args, zctx_t *ctx, void *pipe)
         zclock_sleep (100);
     }
 }
+
+static void
+listener_thread (void *args, zctx_t *ctx, void *pipe)
+{
+    while (true)
+    {
+        zframe_t *frame = zframe_recv (pipe);
+
+        if (!frame) break;
+
+        zframe_print (frame, NULL);
+        zframe_destroy (&frame);
+    }
+}
