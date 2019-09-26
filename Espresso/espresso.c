@@ -57,3 +57,25 @@ listener_thread (void *args, zctx_t *ctx, void *pipe)
         zframe_destroy (&frame);
     }
 }
+
+int main (void)
+{
+    zctx_t *ctx = zctx_new ();
+    zthread_fork (ctx, publisher_thread, NULL);
+    zthread_fork (ctx, subscriber_thread, NULL);
+
+    void *subscriber = zsocket_new (ctx, ZMQ_XSUB);
+    zsocket_connect (subscriber, "tcp://localhost:6000");
+    void *publisher = zsocket_new (ctx, ZMQ_XPUB);
+    zsocket_bind (publisher, "tcp://*:6001");
+
+    void *listener = zthread_fork (ctx, listener_thread, NULL);
+
+    zmq_proxy (subscriber, publisher, listener);
+
+    puts (" Interrupted");
+
+    zctx_destroy (&ctx);
+
+    return 0;
+}
