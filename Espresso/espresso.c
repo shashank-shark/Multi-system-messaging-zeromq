@@ -7,8 +7,8 @@ subscriber_thread (void *args, zctx_t *ctx, void *pipe)
     void *subscriber = zsocket_new (ctx, ZMQ_SUB);
     zmq_connect (subscriber, "tcp://localhost:6001");
 
-    zsockopt_set_subscriber (subscriber, "A");
-    zsockopt_set_subscriber (subscriber, "B");
+    zsocket_set_subscribe (subscriber, "A");
+    zsocket_set_subscribe (subscriber, "B");
 
     int count = 0;
 
@@ -32,7 +32,7 @@ publisher_thread (void *args, zctx_t *ctx, void *pipe)
 
     while (!zctx_interrupted)
     {
-        char *string[10];
+        char string[10];
         sprintf (string, "%c-%05d", randof (10) + 'A', randof (100000));
 
         if (zstr_send (publisher, string) == -1)
