@@ -23,3 +23,23 @@ subscriber_thread (void *args, zctx_t *ctx, void *pipe)
     
     zsocket_destroy (ctx, subscriber);
 }
+
+static void
+publisher_thread (void *args, zctx_t *ctx, void *pipe)
+{
+    void *publisher = zsocket_new (ctx, ZMQ_PUB);
+    zsocket_bind (publisher, "tcp://*:6000");
+
+    while (!zctx_interrupted)
+    {
+        char *string[10];
+        sprintf (string, "%c-%05d", randof (10) + 'A', randof (100000));
+
+        if (zstr_send (publisher, string) == -1)
+        {
+            break;
+        }
+
+        zclock_sleep (100);
+    }
+}
