@@ -9,8 +9,8 @@ int main (int argc, char *argv[])
 	int rc = zmq_bind (publisher, "tcp://*:8080");
 	assert (rc == 0);
 	
-	rc = zmq_bind (publisher, "ipc://weather.ipc");
-	assert (rc == 0);
+	// rc = zmq_bind (publisher, "ipc://weather.ipc");
+	// assert (rc == 0);
 
 	// initialize the random function
 	srandom ((unsigned int)time(NULL));
